@@ -9,7 +9,6 @@ RUN apt-get update && \
 # 최신 Chromium 다운로드 및 설치
 RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chrome-linux64.zip" && \
     unzip /tmp/chrome-linux64.zip -d /usr/local/chrome && \
-    ls -la /usr/local/chrome && \
     chmod +x /usr/local/chrome/chrome-linux64/chrome && \
     ln -s /usr/local/chrome/chrome-linux64/chrome /usr/bin/chromium-browser && \
     rm /tmp/chrome-linux64.zip
@@ -17,6 +16,7 @@ RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-t
 # 최신 ChromeDriver 다운로드 및 설치
 RUN wget -O /tmp/chromedriver-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chromedriver-linux64.zip" && \
     unzip /tmp/chromedriver-linux64.zip -d /usr/local/chromedriver && \
+    ls -la /usr/local/chromedriver && \  # 추가된 명령어
     chmod +x /usr/local/chromedriver/chromedriver && \
     ln -s /usr/local/chromedriver/chromedriver /usr/bin/chromedriver && \
     rm /tmp/chromedriver-linux64.zip
