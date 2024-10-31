@@ -4377,3 +4377,7 @@ C:\Users\goodj\PycharmProjects\django_performance_tool\django_performance_tool\s
 [2024-10-31 19:46:29] INFO "GET /api/average/ HTTP/1.1" 200 681
 [2024-10-31 20:45:38] INFO C:\Users\goodj\PycharmProjects\django_performance_tool\performance\views.py changed, reloading.
 [2024-10-31 20:45:40] INFO Watching for file changes with StatReloader
+[2024-10-31 20:49:06] INFO C:\Users\goodj\PycharmProjects\django_performance_tool\performance\views.py changed, reloading.
+[2024-10-31 20:49:07] INFO Watching for file changes with StatReloader
+[2024-10-31 20:49:30] INFO C:\Users\goodj\PycharmProjects\django_performance_tool\performance\views.py changed, reloading.
+[2024-10-31 20:49:31] INFO Watching for file changes with StatReloader

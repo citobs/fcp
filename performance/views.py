@@ -96,7 +96,7 @@ def measure_performance(url):
     options.add_argument('--disable-cache')
     options.add_argument('--disk-cache-size=0')
     options.add_argument('--disable-application-cache')
-    options.binary_location = "/usr/bin/chromium-browser"  # Render 환경의 Chromium 경로
+
 
     # Chrome 드라이버 실행
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
