@@ -98,9 +98,13 @@ def measure_performance(url):
     options.add_argument('--disk-cache-size=0')
     options.add_argument('--disable-application-cache')
 
+    # ChromeDriver 경로 설정(배포용)
+    service = Service("/usr/bin/chromedriver")  # ChromeDriver 설치 경로(배포용)
+    # WebDriver 실행(배포용)
+    driver = webdriver.Chrome(service=service, options=options)
 
     # Chrome 드라이버 실행
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     # 네트워크 스로틀링 설정 (다운로드/업로드 속도 및 지연 시간 지정)
     driver.execute_cdp_cmd('Network.emulateNetworkConditions', {
