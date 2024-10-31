@@ -17,8 +17,7 @@ RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-t
 # 최신 ChromeDriver 다운로드 및 설치
 RUN wget -O /tmp/chromedriver-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chromedriver-linux64.zip" && \
     unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
-    chmod +x /usr/local/bin/chromedriver-linux64/chromedriver && \
-    ln -s /usr/local/bin/chromedriver-linux64/chromedriver /usr/bin/chromedriver && \
+    chmod +x /usr/local/bin/chromedriver && \
     rm /tmp/chromedriver-linux64.zip
 
 # 작업 디렉토리 설정
@@ -31,7 +30,7 @@ RUN pip install -r requirements.txt
 # 프로젝트 파일 복사
 COPY . .
 
-# 포트 설정 (Render 또는 다른 서비스에 맞게 변경)
+# 포트 설정
 EXPOSE 8000
 
 # Django 앱 시작 명령어 설정

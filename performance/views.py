@@ -88,7 +88,7 @@ logger = logging.getLogger('performance')
 
 def measure_performance(url):
     options = webdriver.ChromeOptions()
-    options.binary_location = "/usr/local/chrome/chrome"  # 배포 환경의 Chrome 실행 파일 경로
+    # options.binary_location = "/usr/local/chrome/chrome"  # 배포 환경의 Chrome 실행 파일 경로
     options.add_argument('--headless')  # 헤드리스 모드
     options.add_argument('--disable-gpu')  # GPU 비활성화
     options.add_argument('--no-sandbox')  # 리눅스 환경에서 권한 문제 방지
@@ -99,10 +99,10 @@ def measure_performance(url):
     options.add_argument('--disable-application-cache')
 
     # Chrome 드라이버 실행(배포용)
-    driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=options)
+    # driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=options)
 
     # Chrome 드라이버 실행
-    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     # 네트워크 스로틀링 설정 (다운로드/업로드 속도 및 지연 시간 지정)
     driver.execute_cdp_cmd('Network.emulateNetworkConditions', {
