@@ -3,7 +3,18 @@ FROM python:3.10-slim
 
 # 필요한 패키지 설치
 RUN apt-get update && \
-    apt-get install -y wget unzip curl && \
+    apt-get install -y wget unzip curl \
+    libnss3 \
+    libgconf-2-4 \
+    libxss1 \
+    libappindicator3-1 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libasound2 \
+    libatk1.0-0 \
+    libcups2 \
+    libgtk-3-0 \
+    libdbus-glib-1-2 && \
     rm -rf /var/lib/apt/lists/*
 
 # 최신 Chromium 다운로드 및 설치
