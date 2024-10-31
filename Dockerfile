@@ -6,8 +6,10 @@ RUN apt-get update && \
     apt-get install -y wget unzip curl chromium && \
     rm -rf /var/lib/apt/lists/*
 
-# ChromeDriver 다운로드 및 설치
-RUN wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip" && \
+# Chrome 버전에 맞는 ChromeDriver 다운로드 및 설치
+RUN CHROME_VERSION=$(chromium --version | grep -oP '[0-9]+') && \
+    DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION) && \
+    wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip" && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
     chmod +x /usr/local/bin/chromedriver && \
     rm /tmp/chromedriver.zip
