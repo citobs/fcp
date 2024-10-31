@@ -7,15 +7,15 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # 최신 Chromium 다운로드 및 설치
-RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chrome-linux64.zip" || { echo "Failed to download Chrome"; exit 1; } && \
-    unzip /tmp/chrome-linux64.zip -d /usr/local/chrome && \
+RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chrome-linux64.zip" || { echo "Failed to download Chrome"; cat /tmp/chrome-linux64.zip; exit 1; } && \
+    unzip /tmp/chrome-linux64.zip -d /usr/local/chrome || { echo "Failed to unzip Chrome"; exit 1; } && \
     chmod +x /usr/local/chrome/chrome && \
     ln -s /usr/local/chrome/chrome /usr/bin/chromium-browser && \
     rm /tmp/chrome-linux64.zip
 
 # 최신 ChromeDriver 다운로드 및 설치
-RUN wget -O /tmp/chromedriver-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chromedriver-linux64.zip" || { echo "Failed to download ChromeDriver"; exit 1; } && \
-    unzip /tmp/chromedriver-linux64.zip -d /usr/local/chromedriver && \
+RUN wget -O /tmp/chromedriver-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chromedriver-linux64.zip" || { echo "Failed to download ChromeDriver"; cat /tmp/chromedriver-linux64.zip; exit 1; } && \
+    unzip /tmp/chromedriver-linux64.zip -d /usr/local/chromedriver || { echo "Failed to unzip ChromeDriver"; exit 1; } && \
     chmod +x /usr/local/chromedriver/chromedriver && \
     ln -s /usr/local/chromedriver/chromedriver /usr/bin/chromedriver && \
     rm /tmp/chromedriver-linux64.zip
