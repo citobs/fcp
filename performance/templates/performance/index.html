@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Performance Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f8ff; /* 블루 계열의 배경색 */
+        }
+        h1, h2 {
+            color: #0056b3; /* 블루 계열 제목 색상 */
+            text-align: center; /* 제목 가운데 정렬 */
+        }
+        form {
+            text-align: center; /* 폼 가운데 정렬 */
+            margin-bottom: 20px;
+            width: 80%; /* 폼의 너비를 80%로 설정 */
+            margin: 0 auto; /* 폼을 가운데 정렬 */
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #0056b3; /* 블루 테두리 */
+            width: 300px; /* input 너비 설정 */
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #0056b3; /* 블루 테두리 */
+            background-color: #0056b3;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #003f7f; /* 버튼 호버시 어두운 블루 */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center; /* 표 안의 텍스트 가운데 정렬 */
+            font-size: 14px;
+        }
+        th {
+            background-color: #0056b3; /* 헤더 블루 배경 */
+            color: white; /* 헤더 글자 색상 */
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* 홀수 줄 배경 색상 */
+        }
+        pre {
+            background-color: #e6f2ff;
+            padding: 10px;
+            border: 1px solid #0056b3;
+            border-radius: 5px;
+            overflow-x: auto;
+            color: #333;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+        }
+        #loading img {
+            width: 50px;
+            height: 50px;
+        }
+        #loading p {
+            color: #0056b3;
+        }
+
+        /* infobox 스타일 */
+        .infobox {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            width: 200px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .infobox h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #0056b3;
+        }
+        .infobox p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        /* FCP와 LCP 정의 */
+        .definition {
+            margin-top: 30px;
+            background-color: #e6f2ff;
+            padding: 10px;
+            border-left: 4px solid #0056b3;
+        }
+        .definition h3 {
+            color: #0056b3;
+        }
+
+        /* 그래프와 표를 이등분하여 배치 */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* 두 요소의 상단을 맞추기 위해 */
+        }
+        .chart-container {
+            width: 100%;
+            height: 800px;
+            margin: 10px;
+        }
+        .table-container {
+            width: 45%;
+        }
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* 색상 조건 */
+        .good {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .needs-improvement {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .slow {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* FCP/LCP 기준 정보 표 스타일 */
+        .criteria-table {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .criteria-table th, .criteria-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .criteria-table th {
+            background-color: #0056b3;
+            color: white;
+        }
+        /* 기준 정보 셀 강조 표시 */
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+<div class="infobox">
+    <h3>Information</h3>
+    <p><strong>Update:</strong> <span id="updateDate"></span></p>
+    <p><strong>Developer:</strong> 최인태</p>
+</div>
+
+<h1>Web Performance Test</h1>
+<form id="performanceForm">
+    <input type="text" id="urlInput" placeholder="https://examle.com" required>
+    <input type="text" id="titleInput" placeholder="title입렵필수(url매칭)" required> <!-- 제목 입력 필드 추가 -->
+    <button type="submit">Test Performance</button>
+</form>
+
+
+<h2>Test Result</h2>
+<pre id="result"></pre>
+
+<div id="loading">
+    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..."> <!-- 로딩 이미지 추가 -->
+    <p>Measuring performance... Please wait.</p>
+</div>
+
+<div class="container">
+    <div class="chart-container">
+        <canvas id="fcpLcpChart"></canvas>
+    </div>
+    <div class="table-container">
+        <h2>Present Results</h2>
+        <table id="averageResultsTable">
+            <thead>
+            <tr>
+                <th>URL</th>
+                <th>Present FCP (s)</th>
+                <th>Present LCP (s)</th>
+                <th>Avg FCP (s)</th>
+                <th>Avg LCP (s)</th>
+            </tr>
+            </thead>
+            <tbody id="averageResultsBody">
+            </tbody>
+        </table>
+
+        <!-- FCP/LCP 기준 정보표 -->
+        <h2>FCP/LCP Benchmark Information </h2>
+        <table class="criteria-table">
+            <thead>
+            <tr>
+                <th>구분</th>
+                <th>우수</th>
+                <th>개선 필요</th>
+                <th>느림</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="fcpRow">
+                <td>FCP</td>
+                <td>1.8초 이하</td>
+                <td>1.8초 ~ 3초</td>
+                <td>3초 이상</td>
+            </tr>
+            <tr id="lcpRow">
+                <td>LCP</td>
+                <td>2.5초 이하</td>
+                <td>2.5초 ~ 4초</td>
+                <td>4초 이상</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- URL별 평균 FCP/LCP 표 -->
+        <h2>Average FCP/LCP by URL</h2>
+        <table id="averageFcpLcpTable">
+            <thead>
+            <tr>
+                 <th>Title</th>
+                <th>Average FCP (s)</th>
+                <th>Average LCP (s)</th>
+            </tr>
+            </thead>
+            <tbody id="averageFcpLcpBody">
+            <!-- JavaScript로 데이터 삽입 -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h2>Past Results</h2>
+<table id="pastResultsTable">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>FCP (s)</th>
+        <th>LCP (s)</th>
+        <th>Total Load Time (s)</th>
+        <th>Timestamp (KTC)</th>
+    </tr>
+    </thead>
+    <tbody id="pastResultsBody">
+    </tbody>
+</table>
+
+<!-- FCP와 LCP 정의 및 필요성 -->
+<div class="definition">
+    <h3>FCP와 LCP란?</h3>
+    <p><strong>FCP (First Contentful Paint)</strong>는 페이지에서 첫 번째로 사용자에게 보이는 요소(예: 이미지, 텍스트)가 렌더링되는 시간을 의미합니다. FCP가 빠를수록
+        사용자는 페이지의 첫 번째 콘텐츠를 빠르게 확인할 수 있으며, 이는 사용자 경험에 중요한 영향을 미칩니다.</p>
+    <p><strong>LCP (Largest Contentful Paint)</strong>는 페이지에서 가장 큰 요소(예: 큰 이미지, 텍스트 블록)가 렌더링되는 시간을 의미합니다. LCP는 주로 페이지의
+        주요 콘텐츠가 사용자에게 얼마나 빨리 제공되는지를 나타내며, 이 값이 짧을수록 사용자 경험이 향상됩니다.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+
+<script>
+    // UTC 타임스탬프를 KTC로변환하는 함수
+    function convertToKTC(utcTimestamp) {
+        const date = new Date(utcTimestamp);
+        // KTC는 UTC +9이므로, 시간에 9시간을 더함
+        date.setHours(date.getHours() + 9);
+        return date.toISOString().replace('T', ' ').substring(0, 19);
+    }
+
+    // FCP/LCP 기준에 따른 셀 색상 설정 함수
+    function setCellColor(value, type) {
+        if (type === 'fcp') {
+            if (value <= 1.8) {
+                return 'good'; // 우수
+            } else if (value > 1.8 && value <= 3) {
+                return 'needs-improvement'; // 개선 필요
+            } else {
+                return 'slow'; // 느림
+            }
+        } else if (type === 'lcp') {
+            if (value <= 2.5) {
+                return 'good'; // 우수
+            } else if (value > 2.5 && value <= 4) {
+                return 'needs-improvement'; // 개선 필요
+            } else {
+                return 'slow'; // 느림
+            }
+        }
+    }
+
+    // 측정한 URL에 대한 FCP/LCP 위치 강조
+function highlightCriteria(fcp, lcp) {
+    // 모든 강조 표시 제거
+    const fcpRow = document.getElementById('fcpRow');
+    const lcpRow = document.getElementById('lcpRow');
+    Array.from(fcpRow.children).forEach(cell => cell.classList.remove('highlight'));
+    Array.from(lcpRow.children).forEach(cell => cell.classList.remove('highlight'));
+
+    // FCP 기준 위치 강조
+    if (fcp <= 1.8) {
+        fcpRow.children[1].classList.add('highlight');
+    } else if (fcp > 1.8 && fcp <= 3) {
+        fcpRow.children[2].classList.add('highlight');
+    } else {
+        fcpRow.children[3].classList.add('highlight');
+    }
+
+    // LCP 기준 위치 강조
+    if (lcp <= 2.5) {
+        lcpRow.children[1].classList.add('highlight');
+    } else if (lcp > 2.5 && lcp <= 4) {
+        lcpRow.children[2].classList.add('highlight');
+    } else {
+        lcpRow.children[3].classList.add('highlight');
+    }
+}
+
+    // 업데이트 일자를 표시하는 함수
+    function updateDate() {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+        document.getElementById('updateDate').innerText = formattedDate;
+    }
+
+    // 로딩 화면 제어 함수
+    function showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+
+    function hideLoading() {
+        document.getElementById('loading').style.display = 'none';
+    }
+
+    // 성능 테스트 폼 처리
+const form = document.getElementById('performanceForm');
+const resultDiv = document.getElementById('result');
+const pastResultsBody = document.getElementById('pastResultsBody');
+const averageResultsBody = document.getElementById('averageResultsBody');
+let fcpData = [];
+let lcpData = [];
+let urlData = [];
+let chart; // 전역 차트 변수
+
+form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const url = document.getElementById('urlInput').value;
+    const title = document.getElementById('titleInput').value; // url title 추가
+
+    // 로딩 화면 표시
+    showLoading();
+
+    // POST 요청으로 성능 테스트 API 호출
+    const response = await fetch('/api/performance/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // CSRF 토큰 추가
+        },
+        body: JSON.stringify({ url: url, title: title })  // title 추가됨
+    });
+
+    // JSON 결과값을 받아서 페이지에 표시
+    const result = await response.json();
+    hideLoading();  // 로딩 화면 숨기기
+
+     if (result.error) {
+        resultDiv.innerText = `Error: ${result.error}`;
+    } else {
+        resultDiv.innerText = JSON.stringify(result.current_data, null, 2);
+
+        const fcp = result.current_data.fcp / 1000;
+        const lcp = result.current_data.lcp / 1000;
+
+        // 측정값에 따라 강조 표시
+        highlightCriteria(fcp, lcp);
+
+        // 과거 데이터를 테이블에 추가
+        pastResultsBody.innerHTML = '';  // 기존 내용을 지우고
+        let totalFcp = 0;
+        let totalLcp = 0;
+        let count = 0;
+        result.past_data.forEach(data => {
+            const newRow = document.createElement('tr');
+            const ktcTimestamp = convertToKTC(data.timestamp);  // KTC 변환
+            const fcpClass = setCellColor(data.fcp / 1000, 'fcp');
+            const lcpClass = setCellColor(data.lcp / 1000, 'lcp');
+
+            newRow.innerHTML = `
+                <td><a href="${url}" target="_blank">${title}</a></td> <!-- title을 링크로 추가 -->
+                <td class="${fcpClass}">${(data.fcp / 1000).toFixed(2)}</td> <!-- 초 단위로 변환 -->
+                <td class="${lcpClass}">${(data.lcp / 1000).toFixed(2)}</td> <!-- 초 단위로 변환 -->
+                <td>${data.total_load_time}</td>
+                <td>${ktcTimestamp}</td>  <!-- 변환된 KTC 시간 표시 -->
+            `;
+            pastResultsBody.appendChild(newRow);
+
+            // FCP, LCP 합계 계산
+            totalFcp += data.fcp;
+            totalLcp += data.lcp;
+            count++;
+        });
+
+        // 평균값 계산
+        const avgFcp = totalFcp / count;
+        const avgLcp = totalLcp / count;
+
+        // 평균값 표에 추가
+        averageResultsBody.innerHTML = `
+            <tr>
+<!--                <td>${url}</td>-->
+                <td><a href="${url}" target="_blank">${title}</a></td> <!-- title을 링크로 추가 -->
+                <td>${(fcp).toFixed(2)}</td> <!-- 현재 측정된 FCP 값 -->
+                <td>${(lcp).toFixed(2)}</td> <!-- 현재 측정된 LCP 값 -->
+                <td>${(avgFcp / 1000).toFixed(2)}</td> <!-- 초 단위로 변환 -->
+                <td>${(avgLcp / 1000).toFixed(2)}</td> <!-- 초 단위로 변환 -->
+            </tr>
+        `;
+
+        // 평균값 그래프 업데이트
+        urlData.push(url);
+        fcpData.push(fcp.toFixed(2));
+        lcpData.push(lcp.toFixed(2));
+        updateChart(fcpData, lcpData, urlData);
+
+        // 평균값 테이블 새로고침
+        await fetchAverageFcpLcp();  // 평균 FCP/LCP 테이블 새로고침
+    }
+});
+
+
+// 차트 생성 및 업데이트 함수
+    function updateChart(fcpData, lcpData, urlData) {
+        const ctx = document.getElementById('fcpLcpChart').getContext('2d');
+
+        // 기존 차트가 존재하면 삭제
+        if (chart) {
+            chart.destroy();
+        }
+
+        // 새로운 차트 생성
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: urlData,
+                datasets: [
+                    {
+                        label: 'FCP',
+                        data: fcpData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        barPercentage: 0.4,
+                        categoryPercentage: 0.8,
+                    },
+                    {
+                        label: 'LCP',
+                        data: lcpData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        barPercentage: 0.4,
+                        categoryPercentage: 0.8,
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+                plugins: {
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${context.raw} s`;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        formatter: (value, context) => `${context.dataset.label}: ${value} s`,
+                        color: 'black',
+                        font: {
+                            weight: 'bold',
+                        }
+                    }
+                },
+                devicePixelRatio: 2 // 해상도 높임
+            },
+            plugins: [ChartDataLabels] // 플러그인 활성화
+        });
+    }
+
+
+    // URL별 평균 FCP/LCP 데이터를 가져와 표에 표시하는 함수
+async function fetchAverageFcpLcp() {
+    try {
+        const response = await fetch('/api/average/');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.error) {
+            console.error('Error fetching average FCP/LCP:', result.error);
+        } else {
+            const averageFcpLcpBody = document.getElementById('averageFcpLcpBody');
+            averageFcpLcpBody.innerHTML = ''; // 기존 내용을 지움
+
+            // URL별 평균 FCP/LCP 데이터가 있는지 확인
+            if (result.averages && Object.keys(result.averages).length > 0) {
+                Object.keys(result.averages).forEach(url => {
+                    const title = result.averages[url].title || 'Unknown'; // title 추가됨
+                    const avgFcp = (result.averages[url].fcp_avg / 1000).toFixed(2); // 초 단위로 변환
+                    const avgLcp = (result.averages[url].lcp_avg / 1000).toFixed(2);
+
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                      <td><a href="${url}" target="_blank">${title}</a></td> <!-- title을 URL로 링크 적용 -->
+                      <td>${avgFcp}</td>
+                      <td>${avgLcp}</td>
+                    `;
+                    averageFcpLcpBody.appendChild(newRow);
+                });
+            } else {
+                console.warn('No averages data found.');
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching average FCP/LCP:', error);
+    }
+}
+
+
+    window.onload = function() {
+        updateDate();  // 업데이트 일자 표시 함수 호출
+        fetchAverageFcpLcp();  // 평균 FCP/LCP 데이터 가져오기
+    };
+</script>
+</body>
+</html>
