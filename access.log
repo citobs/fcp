@@ -4479,3 +4479,16 @@ C:\Users\goodj\PycharmProjects\django_performance_tool\django_performance_tool\s
 [2024-10-31 23:44:14] INFO Watching for file changes with StatReloader
 [2024-10-31 23:44:35] INFO C:\Users\goodj\PycharmProjects\django_performance_tool\performance\views.py changed, reloading.
 [2024-10-31 23:44:36] INFO Watching for file changes with StatReloader
+[2024-10-31 23:45:34] INFO C:\Users\goodj\PycharmProjects\django_performance_tool\performance\views.py changed, reloading.
+[2024-10-31 23:45:35] INFO Watching for file changes with StatReloader
+[2024-10-31 23:45:42] INFO Watching for file changes with StatReloader
+[2024-10-31 23:45:48] INFO Client IP: 172.30.1.254, Request Path: /
+[2024-10-31 23:45:48] INFO "GET / HTTP/1.1" 200 18872
+[2024-10-31 23:45:48] INFO Client IP: 172.30.1.254, Request Path: /api/average/
+[2024-10-31 23:45:48] INFO "GET /api/average/ HTTP/1.1" 200 683
+[2024-10-31 23:45:53] INFO Client IP: 172.30.1.254, Request Path: /api/performance/
+[2024-10-31 23:46:10] INFO "POST /api/performance/ HTTP/1.1" 200 1715
+[2024-10-31 23:46:10] INFO Client IP: 172.30.1.254, Request Path: /api/average/
+[2024-10-31 23:46:10] INFO "GET /api/average/ HTTP/1.1" 200 682
+[2024-10-31 23:49:27] INFO C:\Users\goodj\PycharmProjects\django_performance_tool\performance\views.py changed, reloading.
+[2024-10-31 23:49:28] INFO Watching for file changes with StatReloader
