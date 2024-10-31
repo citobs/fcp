@@ -16,9 +16,9 @@ RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-t
 # 최신 ChromeDriver 다운로드 및 설치
 RUN wget -O /tmp/chromedriver-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chromedriver-linux64.zip" && \
     unzip /tmp/chromedriver-linux64.zip -d /usr/local/chromedriver && \
-    ls -la /usr/local/chromedriver && \
-    chmod +x /usr/local/chromedriver/chromedriver || (echo "ChromeDriver not found!"; exit 1) && \
-    ln -s /usr/local/chromedriver/chromedriver /usr/bin/chromedriver && \
+    ls -la /usr/local/chromedriver/chromedriver-linux64 && \  # 수정된 경로
+    chmod +x /usr/local/chromedriver/chromedriver-linux64/chromedriver || (echo "ChromeDriver not found!"; exit 1) && \
+    ln -s /usr/local/chromedriver/chromedriver-linux64/chromedriver /usr/bin/chromedriver && \
     rm /tmp/chromedriver-linux64.zip
 
 # 작업 디렉토리 설정
