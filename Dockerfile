@@ -3,11 +3,11 @@ FROM python:3.10-slim
 
 # 필요한 패키지 설치
 RUN apt-get update && \
-    apt-get install -y wget unzip curl && \
+    apt-get install -y wget unzip curl libnss3 libxss1 libappindicator3-1 fonts-liberation libasound2 libatk-bridge2.0-0 libgbm1 libgtk-3-0 && \
     rm -rf /var/lib/apt/lists/*
 
 # 최신 Chromium 다운로드 및 설치
-RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chrome-linux64.zip" && \
+RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-testing/130.0.6723.91/linux64/chrome-linux64.zip" && \
     unzip /tmp/chrome-linux64.zip -d /usr/local/ && \
     mv /usr/local/chrome-linux64 /usr/local/chrome && \
     chmod +x /usr/local/chrome/chrome && \
@@ -15,10 +15,9 @@ RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-t
     rm /tmp/chrome-linux64.zip
 
 # 최신 ChromeDriver 다운로드 및 설치
-RUN wget -O /tmp/chromedriver-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chromedriver-linux64.zip" && \
+RUN wget -O /tmp/chromedriver-linux64.zip "https://storage.googleapis.com/chrome-for-testing/130.0.6723.91/linux64/chromedriver-linux64.zip" && \
     unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
-    chmod +x /usr/local/bin/chromedriver-linux64/chromedriver && \
-    ln -s /usr/local/bin/chromedriver-linux64/chromedriver /usr/bin/chromedriver && \
+    chmod +x /usr/local/bin/chromedriver && \
     rm /tmp/chromedriver-linux64.zip
 
 # 작업 디렉토리 설정
