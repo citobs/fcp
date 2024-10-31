@@ -92,6 +92,7 @@ def measure_performance(url):
     options.add_argument('--headless')  # 헤드리스 모드
     options.add_argument('--disable-gpu')  # GPU 비활성화
     options.add_argument('--no-sandbox')  # 리눅스 환경에서 권한 문제 방지
+    options.add_argument('--disable-dev-shm-usage')  # /dev/shm 사용 안 함
 
     # 캐시 비활성화 설정
     options.add_argument('--disable-cache')

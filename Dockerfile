@@ -3,7 +3,10 @@ FROM python:3.10-slim
 
 # 필요한 패키지 설치
 RUN apt-get update && \
-    apt-get install -y wget unzip curl \
+    apt-get install -y \
+    wget \
+    unzip \
+    curl \
     libnss3 \
     libgconf-2-4 \
     libxss1 \
@@ -14,8 +17,10 @@ RUN apt-get update && \
     libatk1.0-0 \
     libcups2 \
     libgtk-3-0 \
-    libdbus-glib-1-2 && \
-    rm -rf /var/lib/apt/lists/*
+    libdbus-glib-1-2 \
+    libxrandr2 \
+    libxinerama1 \
+    libxi6
 
 # 최신 Chromium 다운로드 및 설치
 RUN wget -O /tmp/chrome-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.91/linux64/chrome-linux64.zip" && \
