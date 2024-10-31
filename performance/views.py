@@ -88,7 +88,7 @@ logger = logging.getLogger('performance')
 
 def measure_performance(url):
     options = webdriver.ChromeOptions()
-    # options.binary_location = "/usr/bin/chromium-browser"  # Chrome 또는 Chromium 설치 경로를 명시(배포용)
+    options.binary_location = "/usr/bin/chromium"  # Chromium 설치 경로(배포용)
     options.add_argument('--headless')  # 헤드리스 모드
     options.add_argument('--disable-gpu')  # GPU 비활성화
     options.add_argument('--no-sandbox')  # 리눅스 환경에서 권한 문제 방지
