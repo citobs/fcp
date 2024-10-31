@@ -88,21 +88,15 @@ logger = logging.getLogger('performance')
 
 def measure_performance(url):
     options = webdriver.ChromeOptions()
-    # options.binary_location = "/usr/bin/chromium-browser"
+    options.binary_location = "/usr/local/chrome/chrome"  # 배포 환경의 Chrome 실행 파일 경로
     options.add_argument('--headless')  # 헤드리스 모드
     options.add_argument('--disable-gpu')  # GPU 비활성화
     options.add_argument('--no-sandbox')  # 리눅스 환경에서 권한 문제 방지
-    options.add_argument('--disable-dev-shm-usage')  # /dev/shm 사용 안 함
-    options.add_argument('--remote-debugging-port=9222')  # 원격 디버깅 포트 설정
-    options.add_argument('--disable-software-rasterizer')  # 소프트웨어 래스터화 비활성화
 
     # 캐시 비활성화 설정
     options.add_argument('--disable-cache')
     options.add_argument('--disk-cache-size=0')
     options.add_argument('--disable-application-cache')
-
-    # Chrome 드라이버 실행(배포용)
-    # driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=options)
 
     # Chrome 드라이버 실행
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
